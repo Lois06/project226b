@@ -9,16 +9,12 @@
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="ch.csbe.calendar1.Controller">
   <children>
-    <Label layoutX="238.0" layoutY="76.0" text="Kalender">
+    <Label layoutX="55.0" layoutY="119.0" text="          ARE YOU SURE YOU WANT TO EXIT ?">
       <font>
-        <Font size="32.0" />
+        <Font name="Comic Sans MS" size="20.0" fx:id="x1" />
       </font>
     </Label>
-    <Button fx:id="erstellen" layoutX="150.0" layoutY="178.0" mnemonicParsing="false" onAction="#erstellen" text="Neuer Kalender erstellen">
-      <font>
-        <Font size="24.0" fx:id="x1" />
-      </font>
-    </Button>
-    <Button fx:id="exit" font="$x1" layoutX="261.0" layoutY="255.0" mnemonicParsing="false" onAction="#exit" text="Exit" />
+    <Button fx:id="yes" font="$x1" layoutX="178.0" layoutY="182.0" mnemonicParsing="false" onAction="#yes" text="YES" />
+    <Button fx:id="no" font="$x1" layoutX="341.0" layoutY="182.0" mnemonicParsing="false" onAction="#no" text="NO" />
   </children>
 </AnchorPane>

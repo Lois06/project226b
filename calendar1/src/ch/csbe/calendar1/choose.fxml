@@ -28,5 +28,6 @@
         <ImageView id="image1" fx:id="image2" fitHeight="144.0001220703125" fitWidth="192.0001492802581" layoutX="7.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" />
       </children>
     </Pane>
+    <Button fx:id="back" layoutX="24.0" layoutY="361.0" mnemonicParsing="false" onAction="#back" text="Back to Menu" />
   </children>
 </AnchorPane>

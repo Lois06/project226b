@@ -1,6 +1,13 @@
 package ch.csbe.calendar1;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -8,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -20,18 +28,23 @@ public class FullCalendarView extends Stage{
     private Text calendarTitle;
     private YearMonth currentYearMonth;
 
+
     /**
-     * Create a calendar view
-     * @param yearMonth year month to create the calendar of
+     * Erstellt Kalender view
+     * 
      */
     
     public FullCalendarView(YearMonth yearMonth) {
         currentYearMonth = yearMonth;
-        // Create the calendar grid pane
+        /**
+         * Erstellt Kalender grid pane
+         */
         GridPane calendar = new GridPane();
         calendar.setPrefSize(600, 400);
         calendar.setGridLinesVisible(true);
-        // Create rows and columns with anchor panes for the calendar
+        /**
+         * Erstellt rows und columns mit anchorpanes für den Kalender
+         */
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 7; j++) {
                 AnchorPaneNode ap = new AnchorPaneNode();
@@ -40,10 +53,12 @@ public class FullCalendarView extends Stage{
                 allCalendarDays.add(ap);
             }
         }
-        // Days of the week labels
-        Text[] dayNames = new Text[]{ new Text("Sunday"), new Text("Monday"), new Text("Tuesday"),
-                                        new Text("Wednesday"), new Text("Thursday"), new Text("Friday"),
-                                        new Text("Saturday") };
+        /**
+         * Tage der Woche Labels
+         */
+        Text[] dayNames = new Text[]{ new Text("Monday"), new Text("Tuesday"), new Text("Wednesday"),
+                                        new Text("Thursday"), new Text("Friday"), new Text("Saturday"),
+                                        new Text("Sunday") };
         GridPane dayLabels = new GridPane();
         dayLabels.setPrefWidth(600);
         Integer col = 0;
@@ -54,32 +69,59 @@ public class FullCalendarView extends Stage{
             ap.getChildren().add(txt);
             dayLabels.add(ap, col++, 0);
         }
-        // Create calendarTitle and buttons to change current month
+        
+        /**
+         * Erstellt KalenderTitel und buttons um den Monat zu wechseln
+         */
+        
+        Button choosete = new Button("Back to Choose template ");
+        choosete.setOnAction(e -> choosete(e));
+       
         calendarTitle = new Text();
-        Button previousMonth = new Button("<<");
+        Button previousMonth = new Button("<=");
         previousMonth.setOnAction(e -> previousMonth());
-        Button nextMonth = new Button(">>");
+        
+        Button nextMonth = new Button("=>");
         nextMonth.setOnAction(e -> nextMonth());
         HBox titleBar = new HBox(previousMonth, calendarTitle, nextMonth);
         titleBar.setAlignment(Pos.BASELINE_CENTER);
-        // Populate calendar with the appropriate day numbers
+        
+        ImageView iv1 = new ImageView(Controller.img1);
+        ImageView iv2 = new ImageView(Controller.img2);
+        
+        
+       /**
+        * Erstellt Kalender mit den nummer Tagen
+        */
         populateCalendar(yearMonth);
-        // Create the calendar view
-        view = new VBox(titleBar, dayLabels, calendar);
+        
+        /**
+         * Erstellt den Kalender view
+         */
+        view = new VBox(titleBar, dayLabels, calendar,choosete,iv1,iv2);
     }
 
     /**
-     * Set the days of the calendar to correspond to the appropriate date
-     * @param yearMonth year and month of month to render
+     * Setzt die Tage im Kalender so das es den Datum korrespondiert
+     * 
      */
     public void populateCalendar(YearMonth yearMonth) {
-        // Get the date we want to start with on the calendar
+    
+    	/**
+    	 * Gibt das Datum das man starten will im Kalender
+    	 */
         LocalDate calendarDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonthValue(), 1);
-        // Dial back the day until it is SUNDAY (unless the month starts on a sunday)
-        while (!calendarDate.getDayOfWeek().toString().equals("SUNDAY") ) {
+        
+        /**
+         * Montag ist der erste Tag der Woche
+         */
+        while (!calendarDate.getDayOfWeek().toString().equals("MONDAY") ) {
             calendarDate = calendarDate.minusDays(1);
         }
-        // Populate the calendar with day numbers
+        
+        /**
+         * Publiziert den Kalender mit den Tagen und nummern
+         */
         for (AnchorPaneNode ap : allCalendarDays) {
             if (ap.getChildren().size() != 0) {
                 ap.getChildren().remove(0);
@@ -91,20 +133,47 @@ public class FullCalendarView extends Stage{
             ap.getChildren().add(txt);
             calendarDate = calendarDate.plusDays(1);
         }
-        // Change the title of the calendar
+
+        /**
+         * Wechselt den Titel des Kalenders
+         */
         calendarTitle.setText(yearMonth.getMonth().toString() + " " + String.valueOf(yearMonth.getYear()));
     }
 
     /**
-     * Move the month back by one. Repopulate the calendar with the correct dates.
+     * Button um vom Kalender wieder in das choose.fxml zu gelangen
+     * 
+     */
+    private void choosete(ActionEvent event) {
+    	
+    	Parent rootchoosete;
+		try {
+			rootchoosete = FXMLLoader.load(getClass().getResource("choose.fxml"));
+			Scene scenechoosete = new Scene(rootchoosete);
+	    	Stage stagechoosete = (Stage) ((Node) event.getSource()).getScene().getWindow();
+	    	stagechoosete.setTitle("Choose your template");
+	    	stagechoosete.centerOnScreen();
+	    	stagechoosete.setScene(scenechoosete);
+	    	stagechoosete.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    }
+    
+   
+    
+    /**
+     * Wechselt den Monat eins nach hinten, korrekte daten werden gezeigt
      */
     private void previousMonth() {
         currentYearMonth = currentYearMonth.minusMonths(1);
         populateCalendar(currentYearMonth);
     }
-
+    
     /**
-     * Move the month forward by one. Repopulate the calendar with the correct dates.
+     *  Wechselt den Monat eins nach vorne, korrekte daten werden gezeigt
      */
     private void nextMonth() {
         currentYearMonth = currentYearMonth.plusMonths(1);

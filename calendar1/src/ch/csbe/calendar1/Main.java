@@ -6,7 +6,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 
-
+ /**
+  * 
+  * @author lois.mula
+  * Startet start.fxml
+  *
+  */
 public class Main extends Application {
 
 
