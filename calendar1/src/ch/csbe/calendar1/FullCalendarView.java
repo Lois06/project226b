@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -15,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -86,8 +88,13 @@ public class FullCalendarView extends Stage{
         HBox titleBar = new HBox(previousMonth, calendarTitle, nextMonth);
         titleBar.setAlignment(Pos.BASELINE_CENTER);
         
-        ImageView iv1 = new ImageView(Controller.img1);
-        ImageView iv2 = new ImageView(Controller.img2);
+        ImageView iv1 = scale(200,Controller.img1);
+        ImageView iv2 = new ImageView();
+        if(Controller.img2 != null){
+        iv2 = scale(200,Controller.img2);
+        }
+        //ImageView iv2 = new ImageView(Controller.img2);
+        
         
         
        /**
@@ -100,6 +107,28 @@ public class FullCalendarView extends Stage{
          */
         view = new VBox(titleBar, dayLabels, calendar,choosete,iv1,iv2);
     }
+    
+    /**
+     * Grösse der Bilder skalieren beim Kalender
+     */
+	public ImageView scale(int groesse,Image i){
+		ImageView iv = new ImageView(i);
+		
+		double x = i.getWidth();
+		double y = i.getHeight();
+		if(x>y){
+			iv.setFitWidth(x / (((x-groesse)/groesse)+1));
+			iv.setFitHeight(y / (((x-groesse)/groesse)+1));
+		} else{
+			iv.setFitWidth(x / (((y-groesse)/groesse)+1));
+			iv.setFitHeight(y / (((y-groesse)/groesse)+1));
+		}
+		
+		return iv;
+		
+	}
+
+
 
     /**
      * Setzt die Tage im Kalender so das es den Datum korrespondiert

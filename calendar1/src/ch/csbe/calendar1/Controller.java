@@ -247,7 +247,6 @@ public class Controller implements Initializable{
 		paneBildAuswahlZweier.setVisible(true);
 		
 	}
-
 	
 	
 }
